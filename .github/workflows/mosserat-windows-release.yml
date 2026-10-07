@@ -1,0 +1,97 @@
+name: MosseratClient Windows Vulkan Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  CARGO_HTTP_MULTIPLEXING: false
+
+jobs:
+  build-windows:
+    name: Build Windows x64 with Vulkan
+    runs-on: windows-latest
+    steps:
+      - name: Check out sources and dependencies
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Vulkan SDK
+        uses: humbletim/install-vulkan-sdk@v1.2
+        with:
+          version: 1.3.296.0
+          cache: true
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ./
+
+      - name: Configure
+        run: >-
+          cmake -S . -B build-release -A x64
+          -DTOOLS=OFF
+          -DDOWNLOAD_GTEST=OFF
+          -DPREFER_BUNDLED_LIBS=ON
+          -DVULKAN=ON
+
+      - name: Build client and updater
+        run: |
+          cmake --build build-release --config Release --target game-client --parallel 2
+          cmake --build build-release --config Release --target bestclient-updater --parallel 2
+
+      - name: Package Windows release
+        shell: pwsh
+        run: |
+          cmake --build build-release --config Release --target package_default --parallel 2
+          $package = Get-ChildItem build-release -Filter 'bestclient-*-win64.zip' | Select-Object -First 1
+          if (-not $package) { throw 'Windows package was not generated' }
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          Copy-Item $package.FullName 'artifacts/MosseratClient-windows-x64-vulkan.zip'
+
+      - name: Verify package contents
+        shell: pwsh
+        run: |
+          $archive = 'artifacts/MosseratClient-windows-x64-vulkan.zip'
+          $entries = tar -tf $archive
+          if ($LASTEXITCODE -ne 0) { throw 'Could not read the release archive' }
+          foreach ($required in @('DDNet.exe', 'vulkan-1.dll')) {
+            if (-not ($entries | Where-Object { $_ -match "(^|/)$([regex]::Escape($required))$" })) {
+              throw "Release archive is missing $required"
+            }
+          }
+          if (-not ($entries | Where-Object { $_ -match 'data/shader/vulkan/.*\.spv$' })) {
+            throw 'Release archive is missing compiled Vulkan shaders'
+          }
+
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: MosseratClient-windows-x64-vulkan
+          path: artifacts/MosseratClient-windows-x64-vulkan.zip
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: build-windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows package
+        uses: actions/download-artifact@v4
+        with:
+          name: MosseratClient-windows-x64-vulkan
+          path: artifacts
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: MosseratClient ${{ github.ref_name }}
+          body: Windows x64 release built with Vulkan support. Includes the Vulkan loader and compiled Vulkan shaders.
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: artifacts/MosseratClient-windows-x64-vulkan.zip
