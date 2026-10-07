@@ -520,7 +520,7 @@ function(set_glob VAR GLOBBING EXTS DIRECTORY) # ...
 endfunction()
 
 function(set_src VAR GLOBBING DIRECTORY) # ...
-  set_glob(${VAR} ${GLOBBING} "c;cpp;h" ${DIRECTORY} ${ARGN})
+  set_glob(${VAR} ${GLOBBING} "c;cpp;h;inl" ${DIRECTORY} ${ARGN})
   set(${VAR} ${${VAR}} PARENT_SCOPE)
   set(CHECKSUM_SRC ${CHECKSUM_SRC} ${${VAR}} PARENT_SCOPE)
 endfunction()
@@ -1338,6 +1338,16 @@ endif()
 
 set(EXPECTED_DATA
   # tidy-alphabetical-start
+  BestClient/ActayWide-Bold.otf
+  BestClient/bc_dev_icon.png
+  BestClient/bc_fake_icon.png
+  BestClient/bc_icon.png
+  BestClient/gui_logo.png
+  BestClient/keystrokes/mouse.png
+  BestClient/keystrokes/wasd.png
+  BestClient/languages/russian.txt
+  BestClient/languages/simplified_chinese.txt
+  BestClient/trollface.png
   announcement.txt
   arrow.png
   assets/entities/comfort/ddnet.png
@@ -1476,13 +1486,6 @@ set(EXPECTED_DATA
   audio/wp_switch-03.wv
   autoexec_server.cfg
   background_noise.png
-  BestClient/bc_dev_icon.png
-  BestClient/bc_fake_icon.png
-  BestClient/bc_icon.png
-  BestClient/gui_logo.png
-  BestClient/languages/russian.txt
-  BestClient/languages/simplified_chinese.txt
-  BestClient/trollface.png
   blob.png
   censorlist.txt
   communityicons/none.png
@@ -2880,121 +2883,40 @@ if(CLIENT)
     # tidy-alphabetical-start
     animstate.cpp
     animstate.h
+    bc_menu_badges.h
+    bc_ui_animations.h
     component.cpp
     component.h
     components/background.cpp
     components/background.h
-    components/bestclient/bestclient.cpp
-    components/bestclient/bestclient.h
-    components/bestclient/profile_assets.cpp
-    components/bestclient/profile_assets.h
+    components/bestclient/3d_particles.cpp
+    components/bestclient/3d_particles.h
     components/bestclient/admin_panel.cpp
     components/bestclient/admin_panel.h
     components/bestclient/aspect_ratio.cpp
     components/bestclient/aspect_ratio.h
-    components/bestclient/gradient.cpp
-    components/bestclient/gradient.h
-    components/bestclient/jelly_tee.cpp
-    components/bestclient/jelly_tee.h
-    components/bestclient/flying_name_plates.cpp
-    components/bestclient/flying_name_plates.h
-    components/bestclient/3d_particles.cpp
-    components/bestclient/3d_particles.h
-    components/bestclient/fast_actions.cpp
-    components/bestclient/fast_actions.h
-    components/bestclient/optimizer.cpp
-    components/bestclient/optimizer.h
-    components/bestclient/process_priority.cpp
-    components/bestclient/process_priority.h
-    components/bestclient/discord_rpc.cpp
-    components/bestclient/discord_rpc.h
-    components/bestclient/media_decoder.cpp
-    components/bestclient/media_decoder.h
-    components/bestclient/chat_media.cpp
-    components/bestclient/chat_media.h
+    components/bestclient/automargin.cpp
+    components/bestclient/automargin.h # bestclient
+    components/bestclient/bestclient.cpp
+    components/bestclient/bestclient.h
     components/bestclient/better_preview.cpp
     components/bestclient/better_preview.h
-    components/bestclient/scroll_bar.cpp
-    components/bestclient/scroll_bar.h
-    components/bestclient/chat_message_actions.cpp
-    components/bestclient/chat_message_actions.h
-    components/bestclient/chat_scroll.cpp
-    components/bestclient/chat_scroll.h
-    components/bestclient/console_scroll.cpp
-    components/bestclient/console_scroll.h
-    components/bestclient/menu_media_background.cpp
-    components/bestclient/menu_media_background.h
-    components/bestclient/server_map_preview.cpp
-    components/bestclient/server_map_preview.h
-    components/bestclient/menus_assets_editor.cpp
-    components/bestclient/menus_bestclient.cpp
-    components/bestclient/menus_games.cpp
-    components/bestclient/motion_blur.h
-    components/bestclient/motion_blur_opengl.h
-    components/bestclient/motion_blur_opengl.inl
-    components/bestclient/motion_blur_vulkan.inl
-    components/bestclient/motion_blur_vulkan_members.inl
-    components/bestclient/motion_blur_vulkan_state.inl
     components/bestclient/browser_utils.cpp
     components/bestclient/browser_utils.h
-    components/bestclient/twitch_chat.cpp
-    components/bestclient/twitch_chat.h
-    components/bestclient/translate.cpp
-    components/bestclient/translate.h
-    components/bestclient/chat_qol.cpp
-    components/bestclient/chat_qol.h
-    components/bestclient/camera_extras.cpp
-    components/bestclient/camera_extras.h
     components/bestclient/camera_demos.cpp
     components/bestclient/camera_demos.h
-    components/bestclient/hud_extras.cpp
-    components/bestclient/hud_extras.h
-    components/bestclient/corner_indicator.cpp
-    components/bestclient/corner_indicator.h
-    components/bestclient/cursor_trail.cpp
-    components/bestclient/cursor_trail.h
-    components/bestclient/weapon_vfx.cpp
-    components/bestclient/weapon_vfx.h
-    components/bestclient/laser_glow.cpp
-    components/bestclient/rocket_glow.cpp
-    components/bestclient/nuke_vfx.cpp
-    components/bestclient/menus_fx.cpp
-    components/bestclient/fx/components.h
-    components/bestclient/fx/own_tee.h
-    components/bestclient/fx/fgf_glow.cpp
-    components/bestclient/fx/fgf_glow.h
-    components/bestclient/fx/fgf_actions.cpp
-    components/bestclient/fx/fgf_actions.h
-    components/bestclient/fx/fgf_iceward.cpp
-    components/bestclient/fx/fgf_iceward.h
-    components/bestclient/fx/fgf_ki.cpp
-    components/bestclient/fx/fgf_ki.h
-    components/bestclient/fx/fgf_weather.cpp
-    components/bestclient/fx/fgf_weather.h
-    components/bestclient/fx/lightning.cpp
-    components/bestclient/fx/lightning.h
-    components/bestclient/fx/hookgrip.cpp
-    components/bestclient/fx/hookgrip.h
-    components/bestclient/fx/hookrope.cpp
-    components/bestclient/fx/hookrope.h
-    components/bestclient/fx/hookwind.cpp
-    components/bestclient/fx/hookwind.h
-    components/bestclient/fx/hookblackhole.cpp
-    components/bestclient/fx/hookblackhole.h
-    components/bestclient/fx/hookmagic.cpp
-    components/bestclient/fx/hookmagic.h
-    components/bestclient/fx/hookfire.cpp
-    components/bestclient/fx/hookfire.h
-    components/bestclient/fx/hookrainbow.cpp
-    components/bestclient/fx/hookrainbow.h
-    components/bestclient/fx/hooklightning.cpp
-    components/bestclient/fx/hooklightning.h
-    components/bestclient/fx/hooktentacle.cpp
-    components/bestclient/fx/hooktentacle.h
-    components/bestclient/fx/hooktroll.cpp
-    components/bestclient/fx/hooktroll.h
-    components/bestclient/show_points.cpp
-    components/bestclient/show_points.h
+    components/bestclient/camera_extras.cpp
+    components/bestclient/camera_extras.h
+    components/bestclient/chat_bubbles.cpp
+    components/bestclient/chat_bubbles.h
+    components/bestclient/chat_media.cpp
+    components/bestclient/chat_media.h
+    components/bestclient/chat_message_actions.cpp
+    components/bestclient/chat_message_actions.h
+    components/bestclient/chat_qol.cpp
+    components/bestclient/chat_qol.h
+    components/bestclient/chat_scroll.cpp
+    components/bestclient/chat_scroll.h
     components/bestclient/clientindicator/browser_cache.cpp
     components/bestclient/clientindicator/browser_cache.h
     components/bestclient/clientindicator/client_indicator.cpp
@@ -3003,57 +2925,137 @@ if(CLIENT)
     components/bestclient/clientindicator/presence_cache.cpp
     components/bestclient/clientindicator/presence_cache.h
     components/bestclient/clientindicator/protocol.h
-    components/bestclient/voice/protocol.h
-    components/bestclient/voice/voice.cpp
-    components/bestclient/voice/voice.h
-    components/bestclient/spec_pause_radio.cpp
-    components/bestclient/spec_pause_radio.h
-    components/bestclient/chat_bubbles.cpp
-    components/bestclient/chat_bubbles.h
-    components/bestclient/physicball.cpp
-    components/bestclient/physicball.h
-    components/bestclient/ui_animations.cpp
-    components/bestclient/ui_animations.h
-    components/bestclient/ui_theme/style.h
-    components/bestclient/ui_theme/settings_nav.cpp
-    components/bestclient/ui_theme/settings_nav.h
-    components/bestclient/settings_search.cpp
-    components/bestclient/settings_search.h
-    components/bestclient/ui_theme/widgets.cpp
-    components/bestclient/ui_theme/widgets.h
-    components/bestclient/gif_bubbles.cpp
-    components/bestclient/gif_bubbles.h
+    components/bestclient/clientindicator/version_label.h
+    components/bestclient/cloud_input.cpp
+    components/bestclient/cloud_input.h
+    components/bestclient/console_scroll.cpp
+    components/bestclient/console_scroll.h
+    components/bestclient/corner_indicator.cpp
+    components/bestclient/corner_indicator.h
+    components/bestclient/cursor_trail.cpp
+    components/bestclient/cursor_trail.h
+    components/bestclient/discord_rpc.cpp
+    components/bestclient/discord_rpc.h
+    components/bestclient/edgehelper.cpp
+    components/bestclient/edgehelper.h
     components/bestclient/ego_finished_maps.cpp
     components/bestclient/ego_finished_maps.h
     components/bestclient/ego_tiles_prediction.cpp
     components/bestclient/ego_tiles_prediction.h
-    components/bestclient/edgehelper.cpp
-    components/bestclient/edgehelper.h
+    components/bestclient/fast_actions.cpp
+    components/bestclient/fast_actions.h
     components/bestclient/fast_practice.cpp
     components/bestclient/fast_practice.h
     components/bestclient/finish_prediction.cpp
     components/bestclient/finish_prediction.h
-    components/bestclient/keystrokes.cpp
-    components/bestclient/keystrokes.h
+    components/bestclient/flying_name_plates.cpp
+    components/bestclient/flying_name_plates.h
+    components/bestclient/fx/components.h
+    components/bestclient/fx/fgf_actions.cpp
+    components/bestclient/fx/fgf_actions.h
+    components/bestclient/fx/fgf_glow.cpp
+    components/bestclient/fx/fgf_glow.h
+    components/bestclient/fx/fgf_iceward.cpp
+    components/bestclient/fx/fgf_iceward.h
+    components/bestclient/fx/fgf_ki.cpp
+    components/bestclient/fx/fgf_ki.h
+    components/bestclient/fx/fgf_weather.cpp
+    components/bestclient/fx/fgf_weather.h
+    components/bestclient/fx/hookblackhole.cpp
+    components/bestclient/fx/hookblackhole.h
+    components/bestclient/fx/hookfire.cpp
+    components/bestclient/fx/hookfire.h
+    components/bestclient/fx/hookgrip.cpp
+    components/bestclient/fx/hookgrip.h
+    components/bestclient/fx/hooklightning.cpp
+    components/bestclient/fx/hooklightning.h
+    components/bestclient/fx/hookmagic.cpp
+    components/bestclient/fx/hookmagic.h
+    components/bestclient/fx/hookrainbow.cpp
+    components/bestclient/fx/hookrainbow.h
+    components/bestclient/fx/hookrope.cpp
+    components/bestclient/fx/hookrope.h
+    components/bestclient/fx/hooktentacle.cpp
+    components/bestclient/fx/hooktentacle.h
+    components/bestclient/fx/hooktroll.cpp
+    components/bestclient/fx/hooktroll.h
+    components/bestclient/fx/hookwind.cpp
+    components/bestclient/fx/hookwind.h
+    components/bestclient/fx/lightning.cpp
+    components/bestclient/fx/lightning.h
+    components/bestclient/fx/own_tee.h
+    components/bestclient/gif_bubbles.cpp
+    components/bestclient/gif_bubbles.h
+    components/bestclient/gradient.cpp
+    components/bestclient/gradient.h
     components/bestclient/hud_editor.cpp
     components/bestclient/hud_editor.h
+    components/bestclient/hud_extras.cpp
+    components/bestclient/hud_extras.h
+    components/bestclient/inputs.cpp # bestclient
+    components/bestclient/inputs.h
+    components/bestclient/jelly_tee.cpp
+    components/bestclient/jelly_tee.h
+    components/bestclient/keystrokes.cpp
+    components/bestclient/keystrokes.h
+    components/bestclient/laser_glow.cpp
+    components/bestclient/media_decoder.cpp
+    components/bestclient/media_decoder.h
+    components/bestclient/menu_media_background.cpp
+    components/bestclient/menu_media_background.h
+    components/bestclient/menus_assets_editor.cpp
+    components/bestclient/menus_bestclient.cpp
+    components/bestclient/menus_fx.cpp
+    components/bestclient/menus_games.cpp
+    components/bestclient/motion_blur.h
+    components/bestclient/motion_blur_opengl.h
+    components/bestclient/motion_blur_opengl.inl
+    components/bestclient/motion_blur_vulkan.inl
+    components/bestclient/motion_blur_vulkan_members.inl
+    components/bestclient/motion_blur_vulkan_state.inl
     components/bestclient/music_player.cpp
     components/bestclient/music_player.h
     components/bestclient/music_player_lyrics.cpp
     components/bestclient/music_player_lyrics.h
+    components/bestclient/nuke_vfx.cpp
+    components/bestclient/optimizer.cpp
+    components/bestclient/optimizer.h
+    components/bestclient/physicball.cpp
+    components/bestclient/physicball.h
+    components/bestclient/process_priority.cpp
+    components/bestclient/process_priority.h
+    components/bestclient/profile_assets.cpp
+    components/bestclient/profile_assets.h
     components/bestclient/quick_binds.cpp
     components/bestclient/quick_binds.h
+    components/bestclient/rocket_glow.cpp
     components/bestclient/rollback_demo.cpp
     components/bestclient/rollback_demo.h
+    components/bestclient/scroll_bar.cpp
+    components/bestclient/scroll_bar.h
+    components/bestclient/server_map_preview.cpp
+    components/bestclient/server_map_preview.h
+    components/bestclient/settings_search.cpp
+    components/bestclient/settings_search.h
+    components/bestclient/settings_search_catalog.inl
+    components/bestclient/show_points.cpp
+    components/bestclient/show_points.h
     components/bestclient/snap_tap.cpp
     components/bestclient/snap_tap.h
-    components/bestclient/inputs.cpp # bestclient
-    components/bestclient/inputs.h
-    components/bestclient/cloud_input.cpp
-    components/bestclient/cloud_input.h
-    components/bestclient/automargin.cpp
-    components/bestclient/automargin.h # bestclient
+    components/bestclient/spec_pause_radio.cpp
+    components/bestclient/spec_pause_radio.h
     components/bestclient/subsystem_runtime.h
+    components/bestclient/translate.cpp
+    components/bestclient/translate.h
+    components/bestclient/twitch_chat.cpp
+    components/bestclient/twitch_chat.h
+    components/bestclient/ui_animations.cpp
+    components/bestclient/ui_animations.h
+    components/bestclient/ui_theme/settings_nav.cpp
+    components/bestclient/ui_theme/settings_nav.h
+    components/bestclient/ui_theme/style.h
+    components/bestclient/ui_theme/widgets.cpp
+    components/bestclient/ui_theme/widgets.h
     components/bestclient/updater.cpp
     components/bestclient/updater.h
     components/bestclient/version.h
@@ -3069,7 +3071,11 @@ if(CLIENT)
     components/bestclient/visualizer/source_pulse.cpp
     components/bestclient/visualizer/source_wasapi.cpp
     components/bestclient/visualizer/types.h
-    bc_ui_animations.h
+    components/bestclient/voice/protocol.h
+    components/bestclient/voice/voice.cpp
+    components/bestclient/voice/voice.h
+    components/bestclient/weapon_vfx.cpp
+    components/bestclient/weapon_vfx.h
     components/binds.cpp
     components/binds.h
     components/broadcast.cpp
